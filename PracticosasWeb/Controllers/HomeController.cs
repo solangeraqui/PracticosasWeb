@@ -15,6 +15,7 @@ namespace PracticosasWeb.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
