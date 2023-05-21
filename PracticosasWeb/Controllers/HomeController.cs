@@ -18,6 +18,11 @@ namespace PracticosasWeb.Controllers
 
             return View();
         }
+        public IActionResult contacto()
+        {
+
+            return View();
+        }
 
         public IActionResult Privacy()
         {
