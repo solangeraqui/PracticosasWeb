@@ -95,6 +95,10 @@ public partial class BdpracticosasContext : DbContext
                 .HasForeignKey(d => d.CategoriaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Producto_Categoria");
+
+            entity.HasOne(d => d.ProductoImagen).WithMany(p => p.Productos)
+                .HasForeignKey(d => d.ProductoImagenId)
+                .HasConstraintName("FK_Producto_ProductoImagen");
         });
 
         modelBuilder.Entity<ProductoImagen>(entity =>
@@ -104,11 +108,6 @@ public partial class BdpracticosasContext : DbContext
             entity.ToTable("ProductoImagen");
 
             entity.Property(e => e.Imagen).HasColumnType("image");
-
-            entity.HasOne(d => d.Producto).WithMany(p => p.ProductoImagens)
-                .HasForeignKey(d => d.ProductoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ProductoImagen_Producto");
         });
 
         modelBuilder.Entity<Usuario>(entity =>

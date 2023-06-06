@@ -21,7 +21,9 @@ public partial class Producto
 
     public int Cantidad { get; set; }
 
+    public int? ProductoImagenId { get; set; }
+
     public virtual Categorium Categoria { get; set; } = null!;
 
-    public virtual ICollection<ProductoImagen> ProductoImagens { get; set; } = new List<ProductoImagen>();
+    public virtual ProductoImagen? ProductoImagen { get; set; }
 }

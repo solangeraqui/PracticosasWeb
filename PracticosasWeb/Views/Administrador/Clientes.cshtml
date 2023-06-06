@@ -1,0 +1,212 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<PracticosasWeb.Models.DB.Cliente>
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <script src="../js/vendor/jquery-3.5.1.min.js"></script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Administrador</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="@Url.Action("Admin", "Administrador")">Productos <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link " href="@Url.Action("Categorias", "Administrador")">Categoria <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Pedidos", "Administrador")">Pedidos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="@Url.Action("Usuarios", "Administrador")">Usuarios</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</button></div>
+    <br>
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Correo</th>
+                <th>Direccion</th>
+                <th>Distrito</th>
+                <th>Departamento</th>
+                <th>Telefono</th>
+                <th>Venta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.ClienteId)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Apellidos)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Correo)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Direccion)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Distrito)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Departamento)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Telefono)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Venta)</td>
+                    <td scope="col"><button value="@Html.DisplayFor(modelItem => item.ClienteId)" type="button" class="btn btn-warning editar">Editar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Título del modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Nombre</p>
+                    <input type="text" class="border border-primary nombre">
+                    <br>  <br>
+                    <p>Apellidos</p>
+                    <input type="text" class="border border-primary apellidos">
+                    <p>Correo</p>
+                    <input type="text" class="border border-primary correo">
+                    <p>Direccion</p>
+                    <input type="text" class="border border-primary direccion">
+                    <p>Distrito</p>
+                    <input type="text" class="border border-primary distrito">
+                    <p>Departamento</p>
+                    <input type="text" class="border border-primary departamento">
+                    <p>Telefono</p>
+                    <input type="text" class="border border-primary telefono">
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary guardar">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditar" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Título del modal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Nombre</p>
+                <input type="text" class="border border-primary nombreE">
+                <br>  <br>
+                <p>Precio</p>
+                <input type="text" class="border border-primary precioE">
+                <p>Estado</p>
+                <select class="estadoE">
+                    <option value="1" class="form-control categoria">Activo</option>
+                    <option value="0" class="form-control categoria">Desactivado</option>
+                </select>
+                <br>  <br>
+                <p>Codigo</p>
+                <input type="text" class="border border-primary codigoE">
+                <p>Descripcion</p>
+                <input type="text" class="border border-primary descripcionE">
+                <p>Cantidad</p>
+                <input type="text" class="border border-primary cantidadE">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary guardarE">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+        $(".guardar").click(function () {
+            var nombre = $('.nombre').val();
+            var apellidos = $('.apellidos').val();
+            var correo = $('.correo').val();
+            var direccion = $('.direccion').val();
+            var distrito = $('.distrito').val();
+            var departamento = $('.departamento').val();
+            var telefono = $('.telefono').val();
+            $.ajax({
+                url: "@Url.Action("GuardarCliente", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { nombre: nombre, apellidos: apellidos, correo: correo, direccion: direccion, distrito: distrito, departamento: departamento, telefono: telefono },
+                success: function (data) {
+                    if (data == "hola") {
+                        alert("se guardaron");
+                        window.location.reload();
+                    } else {
+                        alert("no se guardaron los datos");
+                    }
+                    // Manipular los datos recibidos en la respuesta
+
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $(".editar").click(function () {
+            var id = $(this).val();
+            alert(id);
+            $.ajax({
+                url: "@Url.Action("ADmin", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { id: id },
+                success: function (data) {
+                    console.log(data);
+                    $('.nombreE').val(data['nombre']);
+                    $('.categoriaE').val(data['categoriaId']);
+                    $('.precioE').val(data['precioVenta']);
+                    $('.estadoE').val(data['estado']);
+                    $('.codigoE').val(data['codigo']);
+                    $('.descripcionE').val(data['descripcion']);
+                    $('.cantidadE').val(data['cantidad']);
+                    $('.guardarE').val(data['productoId']);
+                    $('#modalEditar').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

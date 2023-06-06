@@ -1,0 +1,126 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<PracticosasWeb.Models.DB.Usuario>
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <script src="../js/vendor/jquery-3.5.1.min.js"></script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Administrador</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="@Url.Action("Admin", "Administrador")">Productos <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link " href="@Url.Action("Categorias", "Administrador")">Categoria <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Clientes", "Administrador")">Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="@Url.Action("Pedidos", "Administrador")">Pedidos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Usuarios</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</button></div>
+    <br>
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Contraseña</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.UsuarioId)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Contrasena)</td>
+                    <td scope="col"><button value="@Html.DisplayFor(modelItem => item.UsuarioId)" type="button" class="btn btn-warning">Editar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Título del modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Nombre</p>
+                    <input type="text" class="border border-primary nombre">
+                    <br>  <br>
+                    <p>Contraseña</p>
+                    <input type="text" class="border border-primary contrasena">
+          
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary guardar">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+        $(".guardar").click(function () {
+            var nombre = $('.nombre').val();
+            var contrasena = $('.contrasena').val();
+           
+            $.ajax({
+                url: "@Url.Action("GuardarUsuario", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { nombre: nombre, contrasena: contrasena },
+                success: function (data) {
+                    if (data == "hola") {
+                        alert("se guardaron");
+                        window.location.reload();
+                    } else {
+                        alert("no se guardaron los datos");
+                    }
+                    // Manipular los datos recibidos en la respuesta
+
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
