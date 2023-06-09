@@ -21,7 +21,7 @@ public partial class BdpracticosasContext : DbContext
 
     public virtual DbSet<Producto> Productos { get; set; }
 
-    public virtual DbSet<ProductoImagen> ProductoImagens { get; set; }
+    public virtual DbSet<TipoUsuario> TipoUsuarios { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
@@ -66,6 +66,9 @@ public partial class BdpracticosasContext : DbContext
             entity.Property(e => e.Distrito)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.Estado)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.Nombre)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -87,6 +90,10 @@ public partial class BdpracticosasContext : DbContext
             entity.Property(e => e.Estado)
                 .HasMaxLength(10)
                 .IsUnicode(false);
+            entity.Property(e => e.Imagen1).HasColumnType("image");
+            entity.Property(e => e.Imagen2).HasColumnType("image");
+            entity.Property(e => e.Imagen3).HasColumnType("image");
+            entity.Property(e => e.Imagen4).HasColumnType("image");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -95,19 +102,16 @@ public partial class BdpracticosasContext : DbContext
                 .HasForeignKey(d => d.CategoriaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Producto_Categoria");
-
-            entity.HasOne(d => d.ProductoImagen).WithMany(p => p.Productos)
-                .HasForeignKey(d => d.ProductoImagenId)
-                .HasConstraintName("FK_Producto_ProductoImagen");
         });
 
-        modelBuilder.Entity<ProductoImagen>(entity =>
+        modelBuilder.Entity<TipoUsuario>(entity =>
         {
-            entity.HasKey(e => e.ImagenId);
+            entity.ToTable("Tipo_usuario");
 
-            entity.ToTable("ProductoImagen");
-
-            entity.Property(e => e.Imagen).HasColumnType("image");
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(15)
+                .IsFixedLength();
         });
 
         modelBuilder.Entity<Usuario>(entity =>
@@ -120,6 +124,11 @@ public partial class BdpracticosasContext : DbContext
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.TipoUsuarioId).HasColumnName("tipo_usuarioId");
+
+            entity.HasOne(d => d.TipoUsuario).WithMany(p => p.Usuarios)
+                .HasForeignKey(d => d.TipoUsuarioId)
+                .HasConstraintName("FK_Usuario_Tipo_usuario");
         });
 
         modelBuilder.Entity<VentaDetalle>(entity =>

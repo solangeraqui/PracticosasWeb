@@ -21,9 +21,13 @@ public partial class Producto
 
     public int Cantidad { get; set; }
 
-    public int? ProductoImagenId { get; set; }
+    public byte[]? Imagen1 { get; set; }
+
+    public byte[]? Imagen2 { get; set; }
+
+    public byte[]? Imagen3 { get; set; }
+
+    public byte[]? Imagen4 { get; set; }
 
     public virtual Categorium Categoria { get; set; } = null!;
-
-    public virtual ProductoImagen? ProductoImagen { get; set; }
 }

@@ -50,6 +50,7 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Contraseña</th>
+                <th>tipoUsuario</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -60,6 +61,7 @@
                     <td scope="col">@Html.DisplayFor(modelItem => item.UsuarioId)</td>
                     <td scope="col">@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td scope="col">@Html.DisplayFor(modelItem => item.Contrasena)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.TipoUsuarioId)</td>
                     <td scope="col"><button value="@Html.DisplayFor(modelItem => item.UsuarioId)" type="button" class="btn btn-warning">Editar</button></td>
                 </tr>
             }
@@ -80,13 +82,50 @@
                     <br>  <br>
                     <p>Contraseña</p>
                     <input type="text" class="border border-primary contrasena">
-          
+                    <p>Tipo de usuario</p>
+                    <select class="tipo">
+                        <option value="1" class="form-control categoria">Administrador</option>
+                        <option value="2" class="form-control categoria">Cliente</option>
+                    </select>
+                    <br>  <br>
 
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary guardar">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Título del modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Nombre</p>
+                    <input type="text" class="border border-primary nombreE">
+                    <br>  <br>
+                    <p>Contraseña</p>
+                    <input type="text" class="border border-primary contrasenaE">
+                    <p>Tipo de usuario</p>
+                    <select class="tipoE">
+                        <option value="1" class="form-control categoria">Administrador</option>
+                        <option value="2" class="form-control categoria">Cliente</option>
+                    </select>
+                    <br>  <br>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary guardarE">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -100,12 +139,64 @@
         $(".guardar").click(function () {
             var nombre = $('.nombre').val();
             var contrasena = $('.contrasena').val();
+            var tipo = $('.tipo').val();
            
             $.ajax({
                 url: "@Url.Action("GuardarUsuario", "Administrador")", // URL de tu controlador y acción
                 type: "POST", // Tipo de petición (GET, POST, etc.)
                 dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
                 data: { nombre: nombre, contrasena: contrasena },
+                success: function (data) {
+                    if (data == "hola") {
+                        alert("se guardaron");
+                        window.location.reload();
+                    } else {
+                        alert("no se guardaron los datos");
+                    }
+                    // Manipular los datos recibidos en la respuesta
+
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+
+        $(".editar").click(function () {
+            var id = $(this).val();
+            alert(id);
+            $.ajax({
+                url: "@Url.Action("ADmin", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { id: id },
+                success: function (data) {
+                    console.log(data);
+                    $('.nombreE').val(data['nombre']);
+                    $('.contrasenaE').val(data['contrasena']);
+                    $('.tipoE').val(data['tipoUsuario']);
+                    $('.guardarE').val(data['productoId']);
+                    $('#modalEditar').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+
+        $(".guardarE").click(function () {
+            var nombre = $('.nombreE').val();
+            var contrasena = $('.contrasenaE').val();
+            var tipo = $('.tipoE').val();
+            $.ajax({
+                url: "@Url.Action("GuardarUsuario", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { nombre: nombre, contrasena: contrasena,tipo:tipo },
                 success: function (data) {
                     if (data == "hola") {
                         alert("se guardaron");

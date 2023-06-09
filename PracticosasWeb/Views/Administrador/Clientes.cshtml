@@ -56,6 +56,7 @@
                 <th>Departamento</th>
                 <th>Telefono</th>
                 <th>Venta</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -72,6 +73,7 @@
                     <td scope="col">@Html.DisplayFor(modelItem => item.Departamento)</td>
                     <td scope="col">@Html.DisplayFor(modelItem => item.Telefono)</td>
                     <td scope="col">@Html.DisplayFor(modelItem => item.Venta)</td>
+                    <td scope="col">@Html.DisplayFor(modelItem => item.Estado)</td>
                     <td scope="col"><button value="@Html.DisplayFor(modelItem => item.ClienteId)" type="button" class="btn btn-warning editar">Editar</button></td>
                 </tr>
             }
@@ -102,6 +104,12 @@
                     <input type="text" class="border border-primary departamento">
                     <p>Telefono</p>
                     <input type="text" class="border border-primary telefono">
+                    <p>Estado</p>
+                    <select class="estado">
+                        <option value="1" class="form-control categoria">Activo</option>
+                        <option value="0" class="form-control categoria">Desactivado</option>
+                    </select>
+                    <br>  <br>
 
 
                 </div>
@@ -124,21 +132,26 @@
             <div class="modal-body">
                 <p>Nombre</p>
                 <input type="text" class="border border-primary nombreE">
-                <br>  <br>
-                <p>Precio</p>
-                <input type="text" class="border border-primary precioE">
+                <p>Apellidos</p>
+                <input type="text" class="border border-primary apellidooE">
+                <p>Correo</p>
+                <input type="text" class="border border-primary correoE">
+                <p>Direccion</p>
+                <input type="text" class="border border-primary direccionE">
+                <p>Distrito</p>
+                <input type="text" class="border border-primary distritoE">
+                <p>Departamento</p>
+                <input type="text" class="border border-primary departamentoE">
+                <p>Telefono</p>
+                <input type="text" class="border border-primary telefonoE">
+                <p>Venta</p>
+                <input type="text" class="border border-primary ventaE">
                 <p>Estado</p>
                 <select class="estadoE">
                     <option value="1" class="form-control categoria">Activo</option>
                     <option value="0" class="form-control categoria">Desactivado</option>
                 </select>
                 <br>  <br>
-                <p>Codigo</p>
-                <input type="text" class="border border-primary codigoE">
-                <p>Descripcion</p>
-                <input type="text" class="border border-primary descripcionE">
-                <p>Cantidad</p>
-                <input type="text" class="border border-primary cantidadE">
 
             </div>
             <div class="modal-footer">
@@ -160,11 +173,12 @@
             var distrito = $('.distrito').val();
             var departamento = $('.departamento').val();
             var telefono = $('.telefono').val();
+            var estado = $('.estado').val();
             $.ajax({
                 url: "@Url.Action("GuardarCliente", "Administrador")", // URL de tu controlador y acción
                 type: "POST", // Tipo de petición (GET, POST, etc.)
                 dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
-                data: { nombre: nombre, apellidos: apellidos, correo: correo, direccion: direccion, distrito: distrito, departamento: departamento, telefono: telefono },
+                data: { nombre: nombre, apellidos: apellidos, correo: correo, direccion: direccion, distrito: distrito, departamento: departamento, telefono: telefono,estado:estado },
                 success: function (data) {
                     if (data == "hola") {
                         alert("se guardaron");
@@ -186,21 +200,54 @@
             var id = $(this).val();
             alert(id);
             $.ajax({
-                url: "@Url.Action("ADmin", "Administrador")", // URL de tu controlador y acción
+                url: "@Url.Action("Clientes", "Administrador")", // URL de tu controlador y acción
                 type: "POST", // Tipo de petición (GET, POST, etc.)
                 dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
                 data: { id: id },
                 success: function (data) {
                     console.log(data);
                     $('.nombreE').val(data['nombre']);
-                    $('.categoriaE').val(data['categoriaId']);
-                    $('.precioE').val(data['precioVenta']);
+                    $('.apellidooE').val(data['apellidos']);
+                    $('.correoE').val(data['correo']);
+                    $('.direccionE').val(data['direccion']);
+                    $('.distritoE').val(data['distrito']);
+                    $('.departamentoE').val(data['departamento']);
+                    $('.telefonoE').val(data['telefono']);
+                    $('.ventaE').val(data['venta']);
                     $('.estadoE').val(data['estado']);
-                    $('.codigoE').val(data['codigo']);
-                    $('.descripcionE').val(data['descripcion']);
-                    $('.cantidadE').val(data['cantidad']);
-                    $('.guardarE').val(data['productoId']);
+                    $('.guardarE').val(data['clienteId']);
                     $('#modalEditar').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $(".guardarE").click(function () {
+            var nombre = $('.nombreE').val();
+            var apellidos = $('.apellidooE').val();
+            var correo = $('.correoE').val();
+            var direccion = $('.direccionE').val();
+            var distrito = $('.distritoE').val();
+            var departamento = $('.departamentoE').val();
+            var telefono = $('.telefonoE').val();
+            var id = $('.guardarE').val();
+            $.ajax({
+                url: "@Url.Action("GuardarCliente", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { nombre: nombre, apellidos: apellidos, correo: correo, direccion: direccion, distrito: distrito, departamento: departamento, telefono: telefono, id:id },
+                success: function (data) {
+                    if (data == "hola") {
+                        alert("se guardaron");
+                        window.location.reload();
+                    } else {
+                        alert("no se guardaron los datos");
+                    }
+                    // Manipular los datos recibidos en la respuesta
+
                 },
                 error: function (xhr, status, error) {
                     // Manejar errores en caso de fallo en la petición AJAX

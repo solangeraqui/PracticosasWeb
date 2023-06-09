@@ -59,8 +59,15 @@
                 <tr>
                     <td scope="col">@Html.DisplayFor(modelItem => item.CategoriaId)</td>
                     <td scope="col">@Html.DisplayFor(modelItem => item.Nombre)</td>
-                    <td scope="col">@Html.DisplayFor(modelItem => item.Estado)</td>
-                    <td scope="col"><button value="@Html.DisplayFor(modelItem => item.CategoriaId)" type="button" class="btn btn-warning">Editar</button></td>
+                    @if (@item.Estado == "1")
+                    {
+                        <td scope="col">Activo</td>
+                    }
+                    else
+                    {
+                        <td scope="col">Inactivo</td>
+                    }
+                    <td scope="col"><button value="@Html.DisplayFor(modelItem => item.CategoriaId)" type="button" class="btn btn-warning editar">Editar</button></td>
                 </tr>
             }
         </tbody>
@@ -91,6 +98,30 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditar" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Título del modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Nombre</p>
+                    <input type="text" class="border border-primary nombreE">
+                    <p>Estado</p>
+                    <select class="estadoE">
+                        <option value="1" class="form-control categoria">Activo</option>
+                        <option value="0" class="form-control categoria">Desactivado</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary guardarE">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
@@ -105,6 +136,54 @@
                 type: "POST", // Tipo de petición (GET, POST, etc.)
                 dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
                 data: { nombre: nombre,  estado: estado},
+                success: function (data) {
+                    if (data == "hola") {
+                        alert("se guardaron");
+                        window.location.reload();
+                    } else {
+                        alert("no se guardaron los datos");
+                    }
+                    // Manipular los datos recibidos en la respuesta
+
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $(".editar").click(function () {
+            var id = $(this).val();
+            alert(id);
+            $.ajax({
+                url: "@Url.Action("Categorias", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { id: id },
+                success: function (data) {
+                    console.log(data);
+                    $('.nombreE').val(data['nombre']);
+                    $('.estadoE').val(data['estado']);
+                    $('.guardarE').val(data['categoriaId']);
+                    $('#modalEditar').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $(".guardarE").click(function () {
+            var nombre = $('.nombreE').val();
+            var estado = $('.estadoE').val();
+            var id = $('.guardarE').val();
+            $.ajax({
+                url: "@Url.Action("GuardarCategoria", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { nombre: nombre, estado: estado, id:id },
                 success: function (data) {
                     if (data == "hola") {
                         alert("se guardaron");

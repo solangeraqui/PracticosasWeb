@@ -21,5 +21,7 @@ public partial class Cliente
 
     public string Telefono { get; set; } = null!;
 
+    public string? Estado { get; set; }
+
     public virtual ICollection<Ventum> Venta { get; set; } = new List<Ventum>();
 }

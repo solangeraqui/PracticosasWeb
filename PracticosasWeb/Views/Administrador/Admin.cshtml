@@ -67,8 +67,13 @@
                     <td scope="col">@item.Nombre</td>
                     <td scope="col">@item.CategoriaId</td>
                     <td scope="col">@item.PrecioVenta</td>
-                    <td scope="col">@item.Estado</td>
-                    <td scope="col">@item.Codigo</td>
+                    @if (@item.Estado == "1") {
+                        <td scope="col">Activo</td>
+                    }
+                    else{
+                    <td scope="col">Inactivo</td> 
+                    }
+                        <td scope="col">@item.Codigo</td>
                     <td scope="col">@item.Descripcion</td>
                     <td scope="col">@item.Cantidad</td>
                     <td scope="col"><button value="@item.ProductoId" type="button" class="btn btn-warning editar">Editar</button></td>
@@ -112,6 +117,12 @@
                     <input type="text" class="border border-primary descripcion">
                     <p>Cantidad</p>
                     <input type="text" class="border border-primary cantidad">
+                    <p>Imagen 1</p>
+                    <input type="file" class="border border-primary imagen1">
+                    <p>Imagen 2</p>
+                    <input type="file" class="border border-primary imagen2">
+                    <p>Imagen 3</p>
+                    <input type="file" class="border border-primary imagen3">
                    
                 </div>
                 <div class="modal-footer">
@@ -156,6 +167,12 @@
                     <input type="text" class="border border-primary descripcionE">
                     <p>Cantidad</p>
                     <input type="text" class="border border-primary cantidadE">
+                    <p>Imagen 1</p>
+                    <input type="file" class="border border-primary imagen1E">
+                    <p>Imagen 2</p>
+                    <input type="file" class="border border-primary imagen2E">
+                    <p>Imagen 3</p>
+                    <input type="file" class="border border-primary imagen3E">
 
                 </div>
                 <div class="modal-footer">
@@ -220,6 +237,38 @@
                     $('.cantidadE').val(data['cantidad']);
                     $('.guardarE').val(data['productoId']);
                     $('#modalEditar').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores en caso de fallo en la petición AJAX
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+
+        $(".guardarE").click(function () {
+            var nombre = $('.nombreE').val();
+            var categoria = $('.categoriaE').val();
+            var precio = $('.precioE').val();
+            var estado = $('.estadoE').val();
+            var codigo = $('.codigoE').val();
+            var descripcion = $('.descripcionE').val();
+            var cantidad = $('.cantidadE').val();
+            var id = $('.guardarE').val();
+            $.ajax({
+                url: "@Url.Action("GuardarProductos", "Administrador")", // URL de tu controlador y acción
+                type: "POST", // Tipo de petición (GET, POST, etc.)
+                dataType: "json", // Tipo de datos que esperas recibir (JSON en este caso)
+                data: { nombre: nombre, categoria: categoria, precio: precio, estado: estado, codigo: codigo, descripcion: descripcion, cantidad: cantidad, id:id },
+                success: function (data) {
+                    if (data == "hola") {
+                        alert("se guardaron");
+                        window.location.reload();
+                    } else {
+                        alert("no se guardaron los datos");
+                    }
+                    // Manipular los datos recibidos en la respuesta
+
                 },
                 error: function (xhr, status, error) {
                     // Manejar errores en caso de fallo en la petición AJAX
