@@ -6,6 +6,8 @@ using PracticosasWeb.Models;
 using System.Diagnostics;
 using MailKit.Net.Smtp;
 using static Org.BouncyCastle.Math.EC.ECCurve;
+using PracticosasWeb.Models.DB;
+using Microsoft.AspNetCore.Http;
 
 namespace PracticosasWeb.Controllers
 {
@@ -28,6 +30,32 @@ namespace PracticosasWeb.Controllers
         {
            
             return View();
+        }
+        public IActionResult Login(string usuario, string password)
+        {
+            if (!string.IsNullOrEmpty(usuario) && !string.IsNullOrEmpty(password))
+            {
+                Usuario user;
+
+                using (var dbContext = new BdpracticosasContext()) // Reemplaza "TuDbContext" con el contexto de tu base de datos
+                {
+                    user = dbContext.Usuarios.FirstOrDefault(p => p.Nombre == usuario);
+                }
+
+                if (user != null && user.Contrasena == password && user.TipoUsuarioId==1)
+                {
+                    HttpContext.Session.SetString("Usuario", user.UsuarioId.ToString());
+                    HttpContext.Session.SetString("Usuario", usuario);
+                    HttpContext.Session.SetString("Contrasena", password);
+                    return RedirectToAction("ADmin", "Administrador");
+                }
+            }
+            else
+            {
+                return View();
+            }
+            return RedirectToAction("Error", "Home");
+
         }
         public void Enviar()
         {

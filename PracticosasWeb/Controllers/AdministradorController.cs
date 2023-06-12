@@ -50,6 +50,7 @@ namespace PracticosasWeb.Controllers
             }
             else
             {
+                var usuario = HttpContext.Session.GetString("Usuario");
                 // Si la solicitud no es AJAX, puedes devolver un error o redirigir a otra acción
                 var productos = _context.Productos.ToList();
                 var categorias = _context.Categoria.ToList();
@@ -57,7 +58,8 @@ namespace PracticosasWeb.Controllers
                 var viewModel = new AdminView
                 {
                     Productos = productos,
-                    Categorias = categorias
+                    Categorias = categorias,
+                    Usuario = usuario
                 };
 
                 return View(viewModel);
